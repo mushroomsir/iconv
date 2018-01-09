@@ -7,6 +7,7 @@ import (
 	"io/ioutil"
 
 	"golang.org/x/text/encoding/simplifiedchinese"
+	"golang.org/x/text/encoding/traditionalchinese"
 	"golang.org/x/text/transform"
 )
 
@@ -18,6 +19,7 @@ var (
 	UTF8       = "UTF-8"
 	GBK        = "GBK"
 	GB18030    = "GB-18030"
+	Big5       = "Big5"
 	charsets   = []string{UTF8, GBK, GB18030}
 	charsetMap = map[string]transform.Transformer{}
 )
@@ -40,6 +42,13 @@ func init() {
 
 	UTF8ToGB18030 := UTF8 + GB18030
 	charsetMap[UTF8ToGB18030] = simplifiedchinese.GB18030.NewEncoder()
+
+	Big5ToUTF8 := Big5 + UTF8
+
+	charsetMap[Big5ToUTF8] = traditionalchinese.Big5.NewDecoder()
+
+	UTF8ToBig5 := UTF8 + Big5
+	charsetMap[UTF8ToBig5] = traditionalchinese.Big5.NewEncoder()
 }
 
 // NewConverter Initialize a new Converter. If fromEncoding or toEncoding are not supported

@@ -10,10 +10,10 @@
 go get -u github.com/mushroomsir/iconv
 ```
 ## Support charset
-- GBK <-> UTF8 
-- UTF8 <-> GBK
-- GB18030 <-> UTF8
-- UTF8 <-> GB18030
+- GBK 
+- GB18030
+- UTF8
+- Big5
 - More coming soon
 
 # Usage
@@ -27,7 +27,7 @@ import (
 Converting a string can be done with two methods. First, there's
 iconv.ConvertString(input, fromEncoding, toEncoding string) syntactic sugar.
 ```go
-	output,err := iconv.ConvertString("Hello World!", iconv.GBK, iconv.UTF8)
+output,err := iconv.ConvertString("Hello World!", iconv.GBK, iconv.UTF8)
 ```
 
 Alternatively, you can create a converter and use its ConvertString method.
@@ -55,12 +55,12 @@ output, err := converter.ConvertBytes(input)
 ```
 
 
-## Converting an \*io.Reader
+## Converting an io.Reader
 
 The iconv.Reader allows any other \*io.Reader to be wrapped and have its bytes
 transcoded as they are read. 
 ```go
-reader,err := iconv.Convert(strings.NewReader("Hello World!"), "utf-8", "windows-1252")
+reader,err := iconv.Convert(strings.NewReader("Hello World!"),  iconv.GBK, iconv.UTF8)
 ```
 
 ## Licenses
