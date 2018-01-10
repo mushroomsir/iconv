@@ -15,6 +15,7 @@ go get -u github.com/mushroomsir/iconv
 - UTF8
 - Big5
 - ISO-8859-1
+- EUCJP
 - More coming soon
 
 # Usage

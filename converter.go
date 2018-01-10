@@ -7,6 +7,7 @@ import (
 	"io/ioutil"
 
 	"golang.org/x/text/encoding/charmap"
+	"golang.org/x/text/encoding/japanese"
 	"golang.org/x/text/encoding/simplifiedchinese"
 	"golang.org/x/text/encoding/traditionalchinese"
 	"golang.org/x/text/transform"
@@ -22,7 +23,8 @@ var (
 	GB18030    = "GB-18030"
 	Big5       = "Big5"
 	ISO88591   = "ISO-8859-1"
-	charsets   = []string{UTF8, GBK, GB18030}
+	EUCJP      = "EUC-JP"
+	charsets   = []string{GBK, GB18030, Big5, ISO88591, EUCJP}
 	charsetMap = map[string]transform.Transformer{}
 )
 
@@ -33,29 +35,25 @@ type Converter struct {
 }
 
 func init() {
-	GBKToUTF8 := GBK + UTF8
-	charsetMap[GBKToUTF8] = simplifiedchinese.GBK.NewDecoder()
-
-	UTF8ToGBK := UTF8 + GBK
-	charsetMap[UTF8ToGBK] = simplifiedchinese.GBK.NewEncoder()
-
-	GB18030ToUTF8 := GB18030 + UTF8
-	charsetMap[GB18030ToUTF8] = simplifiedchinese.GB18030.NewDecoder()
-
-	UTF8ToGB18030 := UTF8 + GB18030
-	charsetMap[UTF8ToGB18030] = simplifiedchinese.GB18030.NewEncoder()
-
-	Big5ToUTF8 := Big5 + UTF8
-	charsetMap[Big5ToUTF8] = traditionalchinese.Big5.NewDecoder()
-
-	UTF8ToBig5 := UTF8 + Big5
-	charsetMap[UTF8ToBig5] = traditionalchinese.Big5.NewEncoder()
-
-	ISO88591ToUTF8 := ISO88591 + UTF8
-	charsetMap[ISO88591ToUTF8] = charmap.ISO8859_1.NewDecoder()
-
-	UTF8ToISO88591 := UTF8 + ISO88591
-	charsetMap[UTF8ToISO88591] = charmap.ISO8859_1.NewEncoder()
+	for _, charset := range charsets {
+		switch charset {
+		case GBK:
+			charsetMap[GBK+UTF8] = simplifiedchinese.GBK.NewDecoder()
+			charsetMap[UTF8+GBK] = simplifiedchinese.GBK.NewEncoder()
+		case GB18030:
+			charsetMap[GB18030+UTF8] = simplifiedchinese.GB18030.NewDecoder()
+			charsetMap[UTF8+GB18030] = simplifiedchinese.GB18030.NewEncoder()
+		case Big5:
+			charsetMap[Big5+UTF8] = traditionalchinese.Big5.NewDecoder()
+			charsetMap[UTF8+Big5] = traditionalchinese.Big5.NewEncoder()
+		case ISO88591:
+			charsetMap[ISO88591+UTF8] = charmap.ISO8859_1.NewDecoder()
+			charsetMap[UTF8+ISO88591] = charmap.ISO8859_1.NewEncoder()
+		case EUCJP:
+			charsetMap[EUCJP+UTF8] = japanese.EUCJP.NewDecoder()
+			charsetMap[UTF8+EUCJP] = japanese.EUCJP.NewEncoder()
+		}
+	}
 }
 
 // NewConverter Initialize a new Converter. If fromEncoding or toEncoding are not supported
