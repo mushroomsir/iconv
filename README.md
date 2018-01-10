@@ -10,12 +10,13 @@
 go get -u github.com/mushroomsir/iconv
 ```
 ## Support charset
+- UTF-8
 - GBK 
-- GB18030
-- UTF8
+- GB-18030
 - Big5
 - ISO-8859-1
-- EUCJP
+- EUC-JP
+- Shift_JIS
 - More coming soon
 
 # Usage
