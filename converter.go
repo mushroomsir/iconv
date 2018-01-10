@@ -28,8 +28,8 @@ var (
 
 // Converter ...
 type Converter struct {
-	FromEncoding string
-	ToEncoding   string
+	fromEncoding string
+	toEncoding   string
 }
 
 func init() {
@@ -61,8 +61,10 @@ func init() {
 // NewConverter Initialize a new Converter. If fromEncoding or toEncoding are not supported
 // then an error will be returned.
 func NewConverter(fromEncoding string, toEncoding string) (*Converter, error) {
-	if _, ok := charsetMap[fromEncoding+toEncoding]; ok {
-		return &Converter{FromEncoding: fromEncoding, ToEncoding: toEncoding}, nil
+	_, fromOK := charsetMap[fromEncoding+UTF8]
+	_, toOK := charsetMap[UTF8+toEncoding]
+	if _, ok := charsetMap[fromEncoding+toEncoding]; ok || (fromOK && toOK) {
+		return &Converter{fromEncoding: fromEncoding, toEncoding: toEncoding}, nil
 	}
 	return nil, ErrNotSupportCharset
 }
@@ -84,6 +86,15 @@ func (t *Converter) ConvertBytes(input []byte) ([]byte, error) {
 
 // Convert ...
 func (t *Converter) Convert(reader io.Reader) io.Reader {
-	srcToDst := string(t.FromEncoding) + string(t.ToEncoding)
-	return transform.NewReader(reader, charsetMap[srcToDst])
+	return t.convert(reader)
+}
+
+func (t *Converter) convert(reader io.Reader) io.Reader {
+	srcToDst := t.fromEncoding + t.toEncoding
+	if val, ok := charsetMap[srcToDst]; ok {
+		return transform.NewReader(reader, val)
+	}
+	resReader := transform.NewReader(reader, charsetMap[t.fromEncoding+UTF8])
+	resReader = transform.NewReader(resReader, charsetMap[UTF8+t.toEncoding])
+	return resReader
 }
