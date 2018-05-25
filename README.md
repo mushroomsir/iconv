@@ -13,6 +13,7 @@ go get -u github.com/mushroomsir/iconv
 - UTF-8
 - GBK 
 - GB-18030
+- GB2312
 - Big5
 - ISO-8859-1
 - EUC-JP
