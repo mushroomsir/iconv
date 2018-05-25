@@ -21,11 +21,12 @@ var (
 	UTF8       = "UTF-8"
 	GBK        = "GBK"
 	GB18030    = "GB-18030"
+	HZGB2312   = "HZ-GB2312"
 	Big5       = "Big5"
 	ISO88591   = "ISO-8859-1"
 	EUCJP      = "EUC-JP"
 	ShiftJIS   = "Shift_JIS"
-	charsets   = []string{GBK, GB18030, Big5, ISO88591, EUCJP, ShiftJIS}
+	charsets   = []string{GBK, GB18030, Big5, ISO88591, EUCJP, ShiftJIS, HZGB2312}
 	charsetMap = map[string]transform.Transformer{}
 )
 
@@ -56,6 +57,9 @@ func init() {
 		case ShiftJIS:
 			charsetMap[ShiftJIS+UTF8] = japanese.ShiftJIS.NewDecoder()
 			charsetMap[UTF8+ShiftJIS] = japanese.ShiftJIS.NewEncoder()
+		case HZGB2312:
+			charsetMap[HZGB2312+UTF8] = simplifiedchinese.HZGB2312.NewDecoder()
+			charsetMap[UTF8+HZGB2312] = simplifiedchinese.HZGB2312.NewEncoder()
 		}
 	}
 }
