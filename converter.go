@@ -26,7 +26,8 @@ var (
 	ISO88591   = "ISO-8859-1"
 	EUCJP      = "EUC-JP"
 	ShiftJIS   = "Shift_JIS"
-	charsets   = []string{GBK, GB18030, Big5, ISO88591, EUCJP, ShiftJIS, HZGB2312}
+	CP850      = "CP850"
+	charsets   = []string{GBK, GB18030, Big5, ISO88591, EUCJP, ShiftJIS, HZGB2312, CP850}
 	charsetMap = map[string]transform.Transformer{}
 )
 
@@ -60,6 +61,9 @@ func init() {
 		case HZGB2312:
 			charsetMap[HZGB2312+UTF8] = simplifiedchinese.HZGB2312.NewDecoder()
 			charsetMap[UTF8+HZGB2312] = simplifiedchinese.HZGB2312.NewEncoder()
+		case CP850:
+			charsetMap[CP850+UTF8] = charmap.CodePage850.NewDecoder()
+			charsetMap[UTF8+CP850] = charmap.CodePage850.NewEncoder()
 		}
 	}
 }
