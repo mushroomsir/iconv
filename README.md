@@ -18,6 +18,7 @@ go get -u github.com/mushroomsir/iconv
 - ISO-8859-1
 - EUC-JP
 - Shift_JIS
+- CP850
 - More coming soon
 
 # Usage

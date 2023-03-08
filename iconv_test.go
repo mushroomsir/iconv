@@ -59,6 +59,8 @@ func TestConvertBytes(t *testing.T) {
 		{"\xba\x7e\xa6\x72", Big5, "漢字", UTF8},
 		{"\xa4\xb3\xa4\xf3\xa4\xcb\xa4\xc1\xa4\xcf\xa1\xa2Python\xa5\xd7\xa5\xed\xa5\xb0\xa5\xe9\xa5\xdf\xa5\xf3\xa5\xb0", EUCJP, "こんにちは、Pythonプログラミング", UTF8},
 		{"\xba\x7e\xa6\x72", Big5, "\xb4\xc1\xbb\xfa", EUCJP},
+		{"é", UTF8, "\x82", CP850},
+		{"\x82", CP850, "é", UTF8},
 	}
 	for _, val := range testCase {
 
